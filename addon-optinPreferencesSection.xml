@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="optinPreferencesSection" title="[kiror] Section for Opt-ins" version_string="0.0" version_id="0" url="https://github.com/adlerosn/" install_callback_class="optinPreferencesSection_Install" install_callback_method="install" uninstall_callback_class="optinPreferencesSection_Install" uninstall_callback_method="uninstall">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates/>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="load_class_controller" execute_order="10" callback_class="optinPreferencesSection_Extend" callback_method="callback" active="1" hint="XenForo_ControllerPublic_Account" description="Add subroute for opt-in"/>
+    <listener event_id="load_class_datawriter" execute_order="10" callback_class="optinPreferencesSection_Extend" callback_method="callback" active="1" hint="XenForo_DataWriter_UserField" description="Add category for opt-ins"/>
+    <listener event_id="load_class_model" execute_order="10" callback_class="optinPreferencesSection_Extend" callback_method="callback" active="1" hint="XenForo_Model_UserField" description="Add category for opt-ins"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups/>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="optins" version_id="0" version_string="0.0"><![CDATA[Opt-ins]]></phrase>
+  </phrases>
+  <route_prefixes/>
+  <style_properties/>
+  <templates>
+    <template title="account_optins" version_id="0" version_string="0.0"><![CDATA[<xen:title>{xen:phrase optins}</xen:title>
+
+<xen:require css="account.css" />
+
+<xen:if is="{$customFields}">
+<form method="post" class="xenForm formOverlay NoFixedOverlay AutoValidator"
+	action="{xen:link 'account/optins-save'}"
+	data-fieldValidatorUrl="{xen:link 'account/validate-field.json'}"
+	data-redirect="yes">
+	
+	<xen:hook name="account_preferences_options">
+	<xen:include template="custom_fields_edit" />
+	</xen:hook>
+	
+
+	<dl class="ctrlUnit submitUnit">
+		<dt></dt>
+		<dd><input type="submit" name="save" value="{xen:phrase save_changes}" accesskey="s" class="button primary" /></dd>
+	</dl>
+
+	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
+</form>
+<xen:else />
+<p class="muted" style="text-align: center;">{xen:phrase none}</p>
+</xen:if>]]></template>
+  </templates>
+  <public_template_modifications>
+    <modification template="account_wrapper" modification_key="addlistitemforoptins" description="Add list item for opt-ins" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[<li><a
+						class="{xen:if "{$selectedKey} == 'account/preferences'", 'secondaryContent', 'primaryContent'}"
+						href="{xen:link account/preferences}">{xen:phrase preferences}</a></li>]]></find>
+      <replace><![CDATA[$0
+					<li><a
+						class="{xen:if "{$selectedKey} == 'account/optins'", 'secondaryContent', 'primaryContent'}"
+						href="{xen:link account/optins}">{xen:phrase optins}</a></li>]]></replace>
+    </modification>
+    <modification template="navigation_visitor_tab" modification_key="addoptinintovisitortab" description="Add opt-in in visitor tab" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[<li><a href="{xen:link account/preferences}" class="OverlayTrigger">{xen:phrase preferences}</a></li>]]></find>
+      <replace><![CDATA[$0
+					<li><a href="{xen:link account/optins}" class="OverlayTrigger">{xen:phrase optins}</a></li>]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes/>
+</addon>
